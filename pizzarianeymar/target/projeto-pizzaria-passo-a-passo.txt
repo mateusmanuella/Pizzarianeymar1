@@ -1,0 +1,1382 @@
+Prof. Rogério Caetano 
+1 
+ 
+Projeto Pizzaria – Spring Boot 
+Site:  Spring Initializr 
+ 
+ 
+ 
+Nota: Dependendo da data em que você acessar o site, a versão do Spring 
+Boot bem como a versão da linguagem Java será diferente. Escolha sempre a 
+versão indicada pelo site. 
+ 
+Descompactar em sua pasta de trabalho 
+ 
+Prof. Rogério Caetano 
+2 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+3 
+ 
+ 
+ 
+Abrir a pasta “pizzaria” com a IDE da sua preferência ( Vs Code, Intellij etc) 
+ 
+No VS-CODE, utilize as extensões: 
+• Extension Pack for Java 
+• Spring Boot Extension Pack 
+• REST Client 
+ 
+Prof. Rogério Caetano 
+4 
+ 
+ 
+ 
+ 
+ 
+Nesta apostila,  vamos utilizar o Intellij 
+ 
+Prof. Rogério Caetano 
+5 
+ 
+ 
+Veja a estrutura de pastas: 
+ 
+src: Contém todo o código-fonte e testes da aplicação 
+src/main: Onde fica o código java da aplicação, estruturado por pacotes (ex: 
+controller, service, repository, etc) 
+src/main/resources: Arquivos de configuração e recursos da aplicação 
+• application.properties ou application.yml : Configurações do Spring (porta, 
+banco, etc) 
+• static : Arquivos estáticos (CSS, JS, imagens e arquivos ) 
+• templates: Arquivos de templates (Html, Thymeleaf, freemarker, etc ) 
+Prof. Rogério Caetano 
+6 
+ 
+src/test : Contém os testes unitários e de integração. Estrutura igual a de 
+main/java 
+target: Gerado automaticamente após o mvn package ou mvn install. Contém: 
+• O .jar ou .war final da aplicação 
+• Classes compiladas 
+• Arquivos temporários de build 
+Nota: Você nunca edita essa pasta manualmente. Ela pode ser deletada a 
+qualquer momento e será recriada. 
+ 
+Então vamos lá: 
+Para nossa pizzaria, vamos considerar o seguinte modelo de dados: 
+ 
+ 
+Antes... um pequeno Desafio 
+Desafio 
+1-) Acessar o site Spring Initializr e criar o projeto referente 
+    ao seu trabalho TCC com as seguintes dependências: 
+    - Spring WEB 
+    - Spring DevTools 
+2-) Abrir o projeto utilizando o Intellij ou o VsCode 
+Prof. Rogério Caetano 
+7 
+ 
+ 
+Na construção do projeto, vamos adotar alguns padrões. 
+O primeiro padrão será um dos padrões de arquitetura mais utilizado em sistemas 
+Web, o MVC ( Model, View e Controller). 
+ 
+O que é MVC? | Blog da TreinaWeb 
+ 
+ 
+ 
+Sobre o pacote principal vamos criar um novo pacote referente a camada “model” 
+Veja: 
+Prof. Rogério Caetano 
+8 
+ 
+ 
+ 
+ 
+O model pode ser dividido em outros pacotes, vamos criar um sub-pacote 
+chamado “entity” 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+9 
+ 
+Veja: 
+ 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+10 
+ 
+ 
+ 
+Vamos criar nossa primeira entidade! 
+Com o botão direito sobre o pacote “entity” criar a classe Produto 
+ 
+Veja: 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+11 
+ 
+ 
+ 
+ 
+ 
+Criar os atributos de acordo com o seu model ( DER ) cada coluna é representada 
+por um atributo. 
+Nota: Cada tabela do banco de dados corresponde a uma entity em nosso projeto. 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+12 
+ 
+Neste primeiro momento, vamos ignorar a chave estrangeira (FK) 
+ 
+ 
+ 
+Desafio 
+Abrir seu projeto de TCC e criar o seu primeiro model “entity”, escolha qualquer 
+tabela que não seja uma tabela associativa. 
+Obs: Aplicar o MVC na estruturação de pacotes, conforme foi feito no projeto 
+pizzariaf. 
+ 
+Exercícios 
+De acordo com o DER a seguir: 
+ 
+Prof. Rogério Caetano 
+13 
+ 
+ 
+ 
+1-) Além do Produto, criar os demais modelos "entity" referente ao DER Pizzaria 
+2-) Criar os métodos setter´s e getter´s de cada atributo 
+ 
+Resolução 
+ Ex. 1-) No pacote entity, todas as classes que representam o DER   
+ 
+ 
+ 
+Prof. Rogério Caetano 
+14 
+ 
+Ex. 2-) Criando  Setter´s  e Getter´s de cada classe: 
+A seguir, as imagens da classe Produto 
+ 
+ 
+Posicionar o curso do mouse abaixo dos atributos. 
+ 
+ 
+ 
+Atalho [ Alt + Insert ]   ->  generate -> getter and Setter 
+ 
+ 
+Prof. Rogério Caetano 
+15 
+ 
+ 
+ 
+Selecionar todos os campos 
+ 
+ 
+ 
+Clique em “OK”  
+Veja o resultado a seguir: 
+Prof. Rogério Caetano 
+16 
+ 
+ 
+ 
+ 
+ 
+Fazer com todas as demais classes (Pedido, Telefone, ItemPedido, Usuario e 
+Categoria) 
+ 
+ 
+Prof. Rogério Caetano 
+17 
+ 
+Annotations 
+No Spring é comum adicionarmos anotações (annotations) em classes, 
+atributos e métodos.  
+Uma annotation é uma forma de adicionar informações (metadados) ao seu 
+código que podem  ser interpretadas pelo compilador ou em tempo de 
+execução por ferramentas e frameworks como o Spring. 
+Uma annotation é uma palavra iniciada com '@' que você coloca acima de 
+uma classe, método, atributo ou parâmetro, para dar instruções extras ao Java 
+ou a algum framework sobre como aquele elemento deve ser tratado. 
+Vamos dar continuidade em nosso projeto agora focando na camada “controller”, 
+as annotations referente ao MVC fazem parte do “Spring Web” uma das 
+dependências que instalamos no início do projeto. 
+Confira no arquivo pom.xml 
+<dependency> 
+    <groupId>org.springframework.boot</groupId> 
+    <artifactId>spring-boot-starter-web</artifactId> 
+</dependency> 
+ 
+Abaixo o quadro com as principais annotations do Spring Web que iremos utilizar. 
+ 
+Anotação Método HTTP Finalidade Aplicação 
+@Controller  
+Indica que a classe é um 
+controlador Spring MVC 
+(retorna páginas/view) 
+Classe 
+@RestController  
+Indica que a classe é um 
+controlador REST (retorna 
+JSON diretamente) 
+Classe 
+@GetMapping GET 
+Mapeia requisições GET para 
+métodos Método 
+@PostMapping POST 
+Mapeia requisições POST 
+para criar novos recursos 
+Método 
+@PutMapping PUT 
+Mapeia requisições PUT para 
+atualizar completamente um 
+recurso. 
+Método 
+@PatchMapping PATCH 
+Mapeia requisições PATCH 
+para atualizar parciais. 
+Método 
+@DeleteMapping DELETE 
+Mapeia requisições DELETE 
+para deletar recursos. 
+Método 
+@RequestMapping 
+Qualquer 
+(configurável) 
+Anotação genérica que 
+permite configurar o tipo de 
+requisição manualmente. 
+Classe e Método 
+Prof. Rogério Caetano 
+18 
+ 
+Em nosso projeto, seguindo o padrão MVC iremos criar a camada de “controller” 
+• Clique com o botão direito sobre o pacote principal  com.itb.inf2fm.pizzariaf   
+• New Package 
+  
+ 
+• Complemente com o nome “controller” 
+• com.itb.inf2fm.pizzariaf.controller   <ENTER> 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+19 
+ 
+ 
+ 
+Sobre o pacote controller, crie a classe ProdutoController 
+ 
+• Clique com o botão direito sobre controller 
+• New Java Class 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+20 
+ 
+• Escreva “ProdutoController” <ENTER> 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+21 
+ 
+Vamos anotar nossa classe com a annotation @RestController 
+Veja: 
+ 
+ 
+ 
+Adicione também a annotation @RequestMapping 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+22 
+ 
+Complemente a anotação @RequestMapping com o endereço principal do 
+“endpoint” 
+• “/api/v1/produtos” 
+ 
+ 
+ 
+Agora, vamos criar um método para listar todos os produtos cadastrados 
+“findAll”. Veja: 
+ 
+Por enquanto vamos criar uma lista local para armazenar todos os produtos, 
+ou seja, vamos simular um pequeno banco de dados. 
+• List<Produto> produtos = new ArrayList<Produto>(); 
+  
+Prof. Rogério Caetano 
+23 
+ 
+ 
+ 
+Simulando um cadastro “antes” da listagem, veja o método: 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+24 
+ 
+Execute o projeto 
+ 
+ 
+ 
+ 
+ 
+Para efetuar o teste, vamos utilizar o browser. 
+Endereço:   
+http://localhost:8080/api/v1/produtos 
+ 
+Prof. Rogério Caetano 
+25 
+ 
+ 
+ 
+Exercício: 
+1-) Em ProdutoController, criar mais um produto e adicione à Lista de Produtos 
+2-) Criar a classe CategoriaController com o método “findAll” responsável em 
+listar todas as categorias.  
+Obs: Levar em consideração o arquivo ProdutoController na resolução. 
+3-) Criar o repositório local e enviar o projeto para o GitHub. 
+ 
+Desafio 
+No projeto de TCC criar a mesma estrutura que foi trabalhado no projeto 
+pizzaria 
+Pacotes: 
+• model.entity 
+1. Criar as classes “Entity” de acordo com o seu DER ( Diagrama 
+Entidade Relacionamento ) ignorando as “FK” 
+2. Criar o métodos:  Setter´s | Getter´s  
+ 
+• controller 
+1. Escolha uma “Entity” qualquer e crie o “Controller” da referida. 
+Exemplo: OngController    ( Controlador da Entidade Ong ) 
+ 
+Prof. Rogério Caetano 
+26 
+ 
+Vamos conectar o nosso banco de dados? 
+ 
+O que é JPA e por que usar com Spring Boot? 
+O JPA (Java Persistence API) é uma especificação para mapeamento objeto-
+relacional (ORM) em Java. Ele permite manipular dados no banco como objetos 
+Java, facilitando operações como salvar, atualizar e buscar registros. 
+Já o Spring Boot é um framework que simplifica a criação de aplicações 
+Spring, com jpa, oferecem uma solução robusta, padronizada e com mínima 
+configuração para acesso a dados 
+A seguir, algumas anotações referente ao Spring Boot JPA e Spring Data JPA 
+Annotation Origem Aplicação Explicação 
+@Entity JPA Classe 
+Marca a classe como uma 
+entidade JPA (será mapeada 
+para uma tabela no banco). 
+@Table(name = "nome_tabela") JPA Classe 
+Define o nome da tabela no 
+banco (opcional se for igual ao 
+nome da classe). 
+@Id JPA Campo 
+Indica o campo que será a chave 
+primária. 
+@GeneratedValue(strategy = ...) JPA Campo 
+Define como a chave primária 
+será gerada (AUTO, IDENTITY, 
+SEQUENCE, TABLE). 
+@Column(name = "...") JPA Campo 
+Mapeia o campo da classe para 
+uma coluna específica da 
+tabela. 
+@Transient JPA Campo 
+Ignora o campo (não será 
+persistido no banco). 
+@Lob JPA Campo 
+Indica que o campo é um tipo 
+grande, como TEXT ou BLOB. 
+@Enumerated(EnumType.STRING) JPA Campo Enum 
+Salva o enum como texto no 
+banco (por padrão, salva como 
+ordinal). 
+@Temporal(TemporalType.DATE) JPA Campo de 
+data 
+Define o tipo de dado temporal 
+(DATE, TIME ou TIMESTAMP). 
+@Embeddable JPA Classe 
+Indica que a classe pode ser 
+embutida em outra entidade 
+(@Embedded). 
+@Embedded JPA Campo 
+Insere os campos de uma classe 
+@Embeddable nesta entidade. 
+@ElementCollection JPA Campo 
+Define uma coleção de 
+elementos básicos ou 
+@Embeddable. 
+@Access(AccessType.FIELD) 
+ 
+ 
+JPA 
+Classe/Camp
+o 
+Define se o JPA acessa via 
+campo ou via getter/setter. 
+Prof. Rogério Caetano 
+27 
+ 
+Relacionamentos JPA 
+@OneToOne JPA 
+Relacioname
+nto 
+Relacionamento 1-para-1 entre 
+entidades. Pode ter mappedBy, 
+cascade, fetch. 
+@OneToMany JPA Relacioname
+nto 
+Um para muitos (ex: um cliente 
+tem muitos pedidos). 
+@ManyToOne JPA 
+Relacioname
+nto 
+Muitos para um (ex: muitos 
+pedidos pertencem a um 
+cliente). 
+@ManyToMany JPA Relacioname
+nto 
+Muitos para muitos (ex: alunos e 
+cursos). 
+@JoinColumn(name = "...") JPA 
+Relacioname
+nto 
+Define a coluna de junção para 
+@OneToOne ou @ManyToOne. 
+@JoinTable JPA Relacioname
+nto 
+Tabela de junção usada em 
+relacionamentos 
+@ManyToMany. 
+@Fetch(FetchMode.JOIN) 
+Hibernat
+e 
+Relacioname
+nto 
+Define como o dado será 
+carregado (JOIN, SELECT, 
+SUBSELECT). 
+Comportamentos de Repositórios - Spring Data JPA 
+@Repository Spring 
+Interface/clas
+se 
+Marca uma classe como 
+repositório do Spring. 
+@Query("JPQL ou SQL") 
+Spring 
+Data JPA 
+Método 
+Permite definir uma consulta 
+JPQL personalizada. 
+@Modifying Spring 
+Data JPA 
+Método Usado com @Query para 
+INSERT, UPDATE, DELETE. 
+@Transactional Spring 
+Classe ou 
+método 
+Garante que o método execute 
+em uma transação. 
+@EnableJpaRepositories Spring Configuração 
+Ativa o uso de repositórios JPA. 
+Pode configurar basePackages. 
+@EntityScan(basePackages = "...") 
+Spring 
+Boot 
+Configuração 
+Indica onde estão suas 
+entidades JPA. 
+@EnableTransactionManagement Spring Configuração 
+Habilita o gerenciamento de 
+transações no Spring. 
+Auditoria e Eventos 
+@CreatedDate 
+Spring 
+Data JPA 
+Campo 
+Define o campo como data de 
+criação (precisa de auditoria 
+habilitada). 
+@LastModifiedDate 
+Spring 
+Data JPA 
+Campo 
+Define o campo como última 
+data de modificação. 
+@CreatedBy 
+Spring 
+Data JPA 
+Campo 
+Armazena quem criou (usado 
+com auditoria). 
+@LastModifiedBy 
+Spring 
+Data JPA 
+Campo 
+Armazena quem modificou por 
+último. 
+@EntityListeners(AuditingEntityListener.
+class) 
+Spring 
+Data JPA Classe 
+Ativa as anotações de auditoria 
+em uma entidade. 
+ 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+28 
+ 
+Para trabalhar com JPA no Spring, precisamos instalar algumas dependências a saber: 
+• Spring Boot Starter Data JPA 
+• Microsoft JDBC Driver For SQL Server 
+É possível baixar as dependências no site oficial do Maven: 
+ https://mvnrepository.com/ 
+ 
+Veja: 
+ 
+ 
+Após pesquisa clique no link indicado 
+ 
+ 
+Prof. Rogério Caetano 
+29 
+ 
+Escolha qualquer versão 
+ 
+ 
+ 
+ 
+ 
+Copiar o código xml 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+30 
+ 
+Abrir o arquivo pom.xml do projeto pizzariaf  e colar no setor de “dependencies” e  
+APAGUE A TAG  <version> </version> 
+ 
+ 
+ 
+ 
+ 
+Voltar no site do maven e repetir o processo para a dependência do SQL Server 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+31 
+ 
+Veja o resultado final: 
+ 
+ 
+ 
+Clique no “m” na parte superior direito do arquivo para baixar as dependências 
+ 
+ 
+ 
+Ao executar o projeto,  perceberemos que o projeto apresentará um erro na execução, normal, 
+pois carece da configuração da conexão com o banco de dados: 
+ 
+Prof. Rogério Caetano 
+32 
+ 
+Abrir o arquivo “application.properties” dentro da pasta resources. 
+ 
+ 
+ 
+ 
+Digite as seguintes informações: 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+33 
+ 
+Agora, o objetivo é executar o projeto “sem erros. 
+Para tal, vamos criar o nosso banco de dados. Lembrando que optamos pelo “none” em spring-
+jpa-hibernate.ddl-auto 
+Abrir seu gerenciador de Banco de dados “SQL Server Management Studio” e criar o banco de 
+dados pizzariaf_db 
+Veja: 
+ 
+F5 para executar o script 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+34 
+ 
+Volte para o seu projeto pizzaria e Execute 
+ 
+ 
+ 
+O servidor deve subir sem problemas! 
+Veja: 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+35 
+ 
+Exercícios: 
+1-) Replicar no TCC o que foi executado no projeto pizzaria, ou seja, instalação e configuração 
+do JPA com JDBC do SQL SERVER 
+ 
+ 
+  
+Prof. Rogério Caetano 
+36 
+ 
+Agora vamos prosseguir na criação do nosso banco de dados 
+Veja o script: 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+37 
+ 
+ 
+ 
+Podemos executar o script para o tratamento de eventuais erros 
+Prof. Rogério Caetano 
+38 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+39 
+ 
+Com o banco de dados criado, vamos prosseguir na Anotações das nossas Entidades, para tal 
+vamos usar o quadro das páginas 25 e 26. 
+ 
+Vamos começar pela Entity Produto  
+Veja: 
+ 
+Obs: Confira a propriedade “length” de @Column de acordo com seu banco de dados, pode ter 
+divergências com o código do professor abaixo. 
+ 
+ 
+Exercícios 
+1-) Vamos prosseguir nas demais anotações do Model Entity 
+ 
+• Categoria 
+• Usuario 
+• Telefone 
+• Pedido 
+• ItemPedido 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+40 
+ 
+Correção 
+ 
+Categoria 
+ 
+ 
+ 
+Telefone 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+41 
+ 
+Pedido 
+ 
+ 
+ 
+ItemPedido 
+ 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+42 
+ 
+Usuario 
+ 
+ 
+ 
+ 
+Após término, atualizar o git / gihub     
+Nota: Caso não tenha o repositório, fazer o exercício 3 da página 24 
+Abrir o Terminal ... 
+ 
+git add  .   <<ENTER>> 
+git commit -m  "Anotações principais de Model Entity concluída, configuração da conexão com o 
+banco SQL Server"    <<ENTER>> 
+git push   <<ENTER>> 
+ 
+Model Repository 
+Agora, vamos prosseguir na camada Model Repository, esta camada será responsável em 
+executar as ações (INSERT, SELECT, UPDATE e DELETE)  com o banco de dados. 
+ 
+Para tal, precisaremos utilizar as anotações contidas na seção: 
+ Comportamentos de Repositórios – Spring Data JPA  ( página 26) 
+Sobre o pacote principal, criar o pacote “model.repository” 
+ 
+Prof. Rogério Caetano 
+43 
+ 
+ 
+Veja: 
+ 
+ 
+complemente com:   model.repository 
+ 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+44 
+ 
+ 
+ 
+Botão direito sobre o “repositor” -> new Java Class 
+ 
+ 
+ 
+Escolha “Interface” 
+Prof. Rogério Caetano 
+45 
+ 
+ 
+ 
+Preencha o nome com “ProdutoRepository” 
+ 
+Prof. Rogério Caetano 
+46 
+ 
+ 
+ 
+Prossiga nas anotações 
+Veja: 
+ 
+ 
+public interface ProdutoRepository extends JpaRepository <   Produto   ,   Long  >  { 
+ 
+} 
+                                                  Entidade Manipulada             Tipo da chave primária 
+ 
+Prof. Rogério Caetano 
+47 
+ 
+Exercícios 
+1-) Prossiga nos demais Repositórios: 
+• CategoriaRepository 
+• TelefoneRepository 
+• UsuarioRepository 
+• PedidoRepository 
+• ItemPedidoRepository 
+ 
+Correção: 
+ 
+CategoriaRepository 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+48 
+ 
+TelefoneRepository 
+ 
+ 
+ 
+UsuarioRepository 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+49 
+ 
+ 
+PedidoRepository 
+ 
+ 
+ 
+ItemPedidoRepository 
+ 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+50 
+ 
+Após término, atualizar o git / gihub     
+Nota: Caso não tenha o repositório, fazer o exercício 3 da página 24 
+Abrir o Terminal ... 
+ 
+git add  .   <<ENTER>> 
+git commit -m  "Anotações principais de Model Repository concluída"    <<ENTER>> 
+git push   <<ENTER>> 
+ 
+ 
+Antes de continuarmos, vamos relembrar a visão geral da nossa API! 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+51 
+ 
+Model Services 
+O que é Service Layer? 
+O Service Layer, ou Camada de Serviço, é um padrão arquitetural que atua como intermediário 
+entre a interface do usuário e a lógica de negócios de uma aplicação. Ele encapsula a lógica de 
+negócios e fornece uma interface para que diferentes partes do sistema possam interagir de forma 
+organizada e eficiente. Essa abordagem é especialmente útil em  aplicações web, onde a 
+separação de responsabilidades é crucial para a manutenção e escalabilidade do código. 
+ 
+Funções principais do Service Layer 
+Uma das principais funções do Service Layer é a centralização da lógica de negócios. Ao invés de 
+espalhar essa lógica por diferentes partes da aplicação, o Service Layer permite que ela seja gerida 
+em um único local. Isso não apenas facilita a manutenção, mas também melhora a testabilidade 
+do código, uma vez que as regras de negócio podem ser testadas independentemente da interface 
+do usuário. Além disso, o Service Layer pode atuar como um ponto de controle para a validação de 
+dados, garantindo que apenas informações válidas sejam processadas. 
+ 
+Vantagens do uso do Service Layer 
+O uso do Service Layer traz diversas vantagens, como a promoção de um design mais limpo e 
+organizado. Isso é especialmente importante em projetos de grande escala, onde a complexidade 
+pode aumentar rapidamente. Outro benefício é a possibilidade de reutilização de código. Com a 
+lógica de negócios centralizada, diferentes partes da aplicação podem reutilizar os mesmos 
+serviços, evitando duplicação e facilitando a manutenção. Além disso, o Service Layer pode 
+facilitar a integração com outros sistemas, já que ele pode expor APIs que podem ser consumidas 
+por diferentes clientes. 
+ 
+ 
+ 
+ 
+Logo, vamos prosseguir na criação da nossa camada de serviços. 
+ 
+No projeto, vamos criar um novo “package” 
+ 
+Botão direito do mouse sobre o packege principal: 
+ 
+Veja 
+ 
+Prof. Rogério Caetano 
+52 
+ 
+ 
+ 
+Complemente o nome: 
+ 
+com.itb.inf2am.pizzariaa.model.services 
+ 
+Veja: 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+53 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Botão direito em “sevices” -> new JavaClass -> ProdutoService 
+ 
+Prof. Rogério Caetano 
+54 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Na continuação, precisamos entender o conceito de “Injeção de Dependência” 
+ 
+A injeção de dependência é um padrão de projeto utilizado para diminuir o acoplamento entre as 
+classes de um sistema. Em outras palavras, é uma forma de estruturar o código para que as 
+classes dependam de abstrações, em vez de dependerem diretamente de outras classes 
+concretas. 
+Mas o que isso significa na prática? Vamos supor que você esteja desenvolvendo um aplicativo que 
+precisa se conectar a um banco de dados. Em vez de criar uma classe que faça a conexão 
+diretamente, você cria uma interface que define os métodos que essa classe deve ter, como 
+"conectar", "desconectar" e "executar consulta". 
+Em seguida, você implementa uma classe concreta que implementa essa interface e realiza a 
+conexão com um banco de dados específico, como o MySQL. Agora, ao invés de outras classes do 
+Prof. Rogério Caetano 
+55 
+ 
+seu sistema dependerem diretamente da classe de conexão com o MySQL, elas dependem da 
+interface genérica que você definiu. 
+E é aí que a injeção de dependência entra em ação. Em vez de instanciar diretamente a classe de 
+conexão dentro das classes dependentes, você assegura que essa dependência seja "injetada" por 
+meio de construtores, métodos ou até mesmo configurações externas. 
+ 
+Nesse primeiro momento, vamos utilizar a Anotação Spring @Autowired  para injeção de 
+dependência. 
+Resumindo: Nossa camada Model Services “depende” da camada Model Repository: 
+Logo declare a seguinte variável em ProdutoServices: 
+ 
+@Autowired    // Injeção de dependência automática 
+private ProdutoRepository produtoRepository; 
+ 
+Veja: 
+ 
+ 
+ 
+Pronto, agora estamos aptos a criar os serviços de CRUD  
+ 
+Veja: 
+ 
+Prof. Rogério Caetano 
+56 
+ 
+ 
+ 
+ 
+ 
+ 
+Para testar os serviços, precisamos “alterar” nosso ProdutoController. Agora já temos o nosso 
+banco de dados: 
+ 
+Veja: 
+ 
+ProdutoController.java 
+ 
+Prof. Rogério Caetano 
+57 
+ 
+ 
+ 
+Execute a aplicação... 
+ 
+ 
+ 
+Caso tenha executado sem erros... 
+Prof. Rogério Caetano 
+58 
+ 
+ 
+Poderemos prosseguir no teste da nossa API. 
+Para tal, precisamos de um “testador de api´s” (Client Rest ), existem vários: 
+A seguir, alguns: 
+• Insomnia 
+• Postman 
+• SoapUI 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+59 
+ 
+OBS: CASO esteja utilizando O VS-CODE,  UTILIZAR O REST Client para prosseguir nos testes, a 
+seguir um exemplo de como montar o arquivo de teste com a extensão .http 
+Você pode criar uma pasta dentro do projeto para salvar o arquivo. 
+Exemplo: pizzariaf/docs/requests/produtos.http 
+ 
+ 
+ 
+ 
+ 
+Se você está no VS-CODE, Prossiga para a página 71... 
+ 
+Clique em Send 
+Request 
+Resultado do teste 
+Prof. Rogério Caetano 
+60 
+ 
+ 
+Em nossos testes no Intellij, vamos utilizar o Insomnia. Em nossos laboratórios você irá encontrá-
+lo no seguinte endereço: 
+D:\Insomnia 
+ 
+Veja: 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Duplo clique para abrir o programa: 
+ 
+ 
+Prof. Rogério Caetano 
+61 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Na sua casa você pode fazer o download, ele é gratuito para utilizar de forma limitada. 
+Download - Insomnia 
+Se preferir pode utilizar o Postman 
+Download Postman | Get Started for Free 
+ 
+ 
+ 
+ 
+Em nosso projeto vamos utilizar o Insomnia 
+ 
+Clique em Insomnia para criar um novo projeto: 
+Prof. Rogério Caetano 
+62 
+ 
+ 
+ 
+ 
+ 
+ 
+Escolha Request Collection 
+ 
+Prof. Rogério Caetano 
+63 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Clique HttpRequest 
+ 
+Prof. Rogério Caetano 
+64 
+ 
+A seguir, temos 2 End-Points Criados: 
+• Listar Produto  (GET) 
+• Salvar Produto (POST) 
+ 
+ 
+ 
+ 
+Para não perder o projeto feito no Insomnia, precisamos “Salvar” 
+ 
+Clique: 
+Preferences -> Data -> Export Data -> Export the “Pizzaria A” Collection -> Export -> Done 
+http://localhost:8080/api/v1/produtos 
+http://localhost:8080/api/v1/produtos 
+Prof. Rogério Caetano 
+65 
+ 
+“Escolher o diretório onde você deseja salvar o arquivo” 
+A seguir  os prints passo – a -  passo 
+ 
+  
+ 
+ 
+http://localhost:8080/api/v1/produtos 
+Prof. Rogério Caetano 
+66 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+67 
+ 
+ 
+Escolher o diretório onde deseja salvar... 
+ 
+ 
+Importando os End-Points 
+ 
+Sempre que quiser recuperar ( abrir ) os end-points salvos na pasta... 
+Prof. Rogério Caetano 
+68 
+ 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+69 
+ 
+ 
+ 
+Procurar na pasta onde você salvou o arquivo 
+ 
+ 
+Prof. Rogério Caetano 
+70 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Escolher a referida Collection  
+ 
+Prof. Rogério Caetano 
+71 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+http://localhost:8080/api/v1/produtos 
+Prof. Rogério Caetano 
+72 
+ 
+Para os demais End-Points, precisamos atualizar nosso ProdutoService, vamos prosseguir na 
+criação dos seguintes métodos: 
+• findById 
+• update 
+• delete 
+Veja: A classe ProdutoService completa: 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+73 
+ 
+ 
+ 
+Após término, atualizar o git / gihub     
+Nota: Caso não tenha o repositório, fazer o exercício 3 da página 24 
+Abrir o Terminal ... 
+ 
+git add  .   <<ENTER>> 
+git commit -m  "Serviços ( CRUD ) de Produto concluído"    <<ENTER>> 
+git push   <<ENTER>> 
+ 
+A seguir, o ProdutoController completo com todos os métodos do CRUD 
+ 
+• Listar todos Produtos 
+• Salvar Produto 
+• Listar Produto por Id 
+• Atualizar Produto 
+• Excluir Produto 
+ 
+Prof. Rogério Caetano 
+74 
+ 
+ 
+ 
+@RestController 
+@RequestMapping (“/api/v1/produtos”) 
+@RestController 
+@RequestMapping (“/api/v1/produtos”) 
+Prof. Rogério Caetano 
+75 
+ 
+ 
+ 
+ 
+ 
+ 
+Prof. Rogério Caetano 
+76 
+ 
+ 
+Prosseguindo temos todos os End Points no Insomnia 
+No VS-CODE: REST Cliente no arquivo ( produtos.http ) 
+ 
+Listar Produtos 
+ 
+Listar Produto por ID 
+ 
+ 
+ 
+ 
+http://localhost:8080/api/v1/produtos 
+http://localhost:8080/api/v1/produtos/2 
+Prof. Rogério Caetano 
+77 
+ 
+ 
+Excluir produto por ID 
+ 
+Salvar Produto 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+http://localhost:8080/api/v1/produtos/4 
+http://localhost:8080/api/v1/produtos 
+Prof. Rogério Caetano 
+78 
+ 
+ 
+Atualizar Produto 
+ 
+ 
+ 
+ 
+Com todos os testes terminados, temos a necessidade de liberar o CORS para que o  
+FRONT-END consiga conectar com a nossa API. 
+Em nosso caso, vamos liberar as portas 5173 ( Vite – React) e a porta 8686 ( Mobile Flutter ) 
+ 
+CORS 
+CORS - Cross-Origin Resource Sharing (Compartilhamento de recursos com origens 
+diferentes) é um mecanismo que usa cabeçalhos adicionais HTTP para informar a um 
+navegador que permita que um aplicativo Web seja executado em uma origem (domínio) com 
+permissão para acessar recursos selecionados de um servidor em uma origem distinta. Um 
+aplicativo Web executa uma requisição cross-origin HTTP ao solicitar um recurso que tenha 
+uma origem diferente (domínio, protocolo e porta) da sua própria origem. 
+ 
+ 
+ 
+ 
+ 
+ 
+http://localhost:8080/api/v1/produtos/1 
+Prof. Rogério Caetano 
+79 
+ 
+ 
+Criar o package “config” e dentro uma classe “CorsConfiguration” 
+Obs: Criar o packge “CORRETAMENTE” dentro do package principal. 
+Veja: 
+ 
+ 
+ 
+Após término, atualizar o git / gihub     
+Nota: Caso não tenha o repositório, fazer o exercício 3 da página 24 
+Abrir o Terminal ... 
+ 
+git add  .   <<ENTER>> 
+git commit -m  "Controller ( CRUD ) de Produto concluído e Cors configurado"    <<ENTER>> 
+git push   <<ENTER>> 
+ 
+ 
+Projeto Completo no GitHub 
+ 
+• https://github.com/rogercaetanos/pizzaria-crud.git 
+ 

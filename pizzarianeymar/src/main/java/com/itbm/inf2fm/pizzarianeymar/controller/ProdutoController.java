@@ -1,43 +1,18 @@
 package com.itbm.inf2fm.pizzarianeymar.controller;
-
 import java.util.List;
-
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import com.itbm.inf2fm.pizzarianeymar.model.entity.Produto;
 import com.itbm.inf2fm.pizzarianeymar.model.services.ProdutoService;
-
-
-
-//ANOTAÇÕES PARA A CLASSE dependência necessária -> spring-boot-starter-webmvc
-
-// @Controller: Sistema Web ( Sites em Geral ) - Back-End + Front-End 
-// @RestController: Api - Apenas Back-End
-
-//ANOTAÇÕES PARA MÉTODOS dependência necessária -> spring-boot-starter-webmvc
-
-// @GetMapping Utiliado para "buscar" dados na API (Somente pesquisa)
-// @PostMapping Utilizado para "enviar" dados para API
-// @PutMapping Utilizado para "atualizar" todos os dados na API 
-// @Delete Utilizado para "excluir" dados na API
-// @PatchMapping Utilizado para "atualizar parcialmente" dados na API, exemplo mudar o status de um produto 
-
-//ResponseEntity: Controla a resposta HTTP
 
 @RestController
 @RequestMapping("/api/v1/produtos")
 public class ProdutoController {
-
-    //Ligando meu controlador com o respectivo serviço
-    private ProdutoService  produtoService = new ProdutoService();
-
-    @GetMapping
-    public ResponseEntity <List<Produto>> listarTodosProdutos (){
-
-        return ResponseEntity.ok().body(produtoService.listarTodos());
-    }
-
+    private final ProdutoService produtoService;
+    public ProdutoController(ProdutoService produtoService) { this.produtoService = produtoService; }
+    @GetMapping public ResponseEntity<List<Produto>> listarTodosProdutos() { return ResponseEntity.ok(produtoService.listarTodos()); }
+    @GetMapping("/{id}") public ResponseEntity<Produto> buscarPorId(@PathVariable Long id) { Produto produto = produtoService.buscarPorId(id); return produto == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(produto); }
+    @PostMapping public ResponseEntity<Produto> salvar(@RequestBody Produto produto) { return ResponseEntity.status(201).body(produtoService.salvar(produto)); }
+    @PutMapping("/{id}") public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody Produto produto) { Produto atualizado = produtoService.atualizar(id, produto); return atualizado == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(atualizado); }
+    @DeleteMapping("/{id}") public ResponseEntity<Void> excluir(@PathVariable Long id) { return produtoService.excluir(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build(); }
 }

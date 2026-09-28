@@ -1,0 +1,5 @@
+# Created at 2026-09-15T12:18:47.606
+Boot Manifest-JAR contains absolute paths in classpath 'Z:\LIP1\pizzarianeymar_\pizzarianeymar\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+
