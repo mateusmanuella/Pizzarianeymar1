@@ -28,12 +28,27 @@ public class ProdutoService {
 
     public Produto findById(Long id){
         return produtoRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Produto não encontrado om o id" + id));
+                .orElseThrow(()-> new RuntimeException("Produto não encontrado com o id" + id));
     }
 
     //metodo responsavel em atualizar o produto
 
     public Produto update(Long id, Produto produto)
         Produto produtoExistente = findById(id);
-        produtoExistente.setDescricao(null);
+        produtoExistente.setNome(produto.getNome());
+        produtoExistente.setDescricao(produto.getDescricao());
+        produtoExistente.setTipo(produto.getTipo());
+        produtoExistente.setQuantidadeEstoque(produto.getQuantidadeEstoque());
+        produtoExistente.setValorCompra(produto.getValorCompra());
+        produtoExistente.setValorVenda(produto.getValorVenda());
+        produtoExistente.setCodStatus(produtoExistente());
+        return produtoRepositor.save(produtoExistente);
 }
+
+//metodo responsavel em excluir o produto (exclusao fisica)
+
+    public void delete(Long id){
+            Produto produtoExistente = findyid(id);
+            produtoRepository.delete(produtoExistente);
+    }
+

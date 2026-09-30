@@ -22,4 +22,8 @@ public class Produto {
     public int getQuantidadeEstoque() { return quantidadeEstoque; } public void setQuantidadeEstoque(int quantidadeEstoque) { this.quantidadeEstoque = quantidadeEstoque; }
     public boolean isCodStatus() { return codStatus; } public void setCodStatus(boolean codStatus) { this.codStatus = codStatus; }
     public Categoria getCategoria() { return categoria; } public void setCategoria(Categoria categoria) { this.categoria = categoria; }
+    public Object getTipo() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getTipo'");
+    }
 }
